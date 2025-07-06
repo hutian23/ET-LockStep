@@ -3,10 +3,17 @@ using UnityEngine;
 
 namespace ET.Client
 {
+	/// <summary>
+	/// LSAnimatorComponent系统类，负责管理动画组件的生命周期和动画播放
+	/// </summary>
 	[EntitySystemOf(typeof(LSAnimatorComponent))]
 	[FriendOf(typeof(LSAnimatorComponent))]
 	public static partial class LSAnimatorComponentSystem
 	{
+		/// <summary>
+		/// 销毁动画组件时清理资源
+		/// </summary>
+		/// <param name="self">动画组件实例</param>
 		[EntitySystem]
 		private static void Destroy(this LSAnimatorComponent self)
 		{
@@ -15,6 +22,10 @@ namespace ET.Client
 			self.Animator = null;
 		}
 		
+		/// <summary>
+		/// 初始化动画组件，获取Animator组件并缓存动画片段和参数
+		/// </summary>
+		/// <param name="self">动画组件实例</param>
 		[EntitySystem]
 		private static void Awake(this LSAnimatorComponent self)
 		{
@@ -45,6 +56,10 @@ namespace ET.Client
 			}
 		}
 		
+		/// <summary>
+		/// 更新动画状态，处理动画播放逻辑
+		/// </summary>
+		/// <param name="self">动画组件实例</param>
 		[EntitySystem]
 		private static void Update(this LSAnimatorComponent self)
 		{
@@ -73,11 +88,23 @@ namespace ET.Client
 			}
 		}
 
+		/// <summary>
+		/// 检查动画器是否包含指定的参数
+		/// </summary>
+		/// <param name="self">动画组件实例</param>
+		/// <param name="parameter">参数名称</param>
+		/// <returns>如果包含该参数返回true，否则返回false</returns>
 		public static bool HasParameter(this LSAnimatorComponent self, string parameter)
 		{
 			return self.Parameter.Contains(parameter);
 		}
 
+		/// <summary>
+		/// 在指定时间内播放动画
+		/// </summary>
+		/// <param name="self">动画组件实例</param>
+		/// <param name="motionType">动画类型</param>
+		/// <param name="time">播放时间（秒）</param>
 		public static void PlayInTime(this LSAnimatorComponent self, MotionType motionType, float time)
 		{
 			AnimationClip animationClip;
@@ -96,6 +123,12 @@ namespace ET.Client
 			self.MontionSpeed = motionSpeed;
 		}
 
+		/// <summary>
+		/// 播放指定类型的动画
+		/// </summary>
+		/// <param name="self">动画组件实例</param>
+		/// <param name="motionType">动画类型</param>
+		/// <param name="motionSpeed">动画播放速度，默认为1.0</param>
 		public static void Play(this LSAnimatorComponent self, MotionType motionType, float motionSpeed = 1f)
 		{
 			if (!self.HasParameter(motionType.ToString()))
@@ -106,6 +139,12 @@ namespace ET.Client
 			self.MontionSpeed = motionSpeed;
 		}
 
+		/// <summary>
+		/// 获取指定动画类型的播放时长
+		/// </summary>
+		/// <param name="self">动画组件实例</param>
+		/// <param name="motionType">动画类型</param>
+		/// <returns>动画片段的长度（秒）</returns>
 		public static float AnimationTime(this LSAnimatorComponent self, MotionType motionType)
 		{
 			AnimationClip animationClip;
@@ -116,6 +155,10 @@ namespace ET.Client
 			return animationClip.length;
 		}
 
+		/// <summary>
+		/// 暂停动画播放
+		/// </summary>
+		/// <param name="self">动画组件实例</param>
 		public static void PauseAnimator(this LSAnimatorComponent self)
 		{
 			if (self.isStop)
@@ -132,6 +175,10 @@ namespace ET.Client
 			self.Animator.speed = 0;
 		}
 
+		/// <summary>
+		/// 恢复动画播放
+		/// </summary>
+		/// <param name="self">动画组件实例</param>
 		public static void RunAnimator(this LSAnimatorComponent self)
 		{
 			if (!self.isStop)
@@ -148,6 +195,12 @@ namespace ET.Client
 			self.Animator.speed = self.stopSpeed;
 		}
 
+		/// <summary>
+		/// 设置动画器的布尔参数值
+		/// </summary>
+		/// <param name="self">动画组件实例</param>
+		/// <param name="name">参数名称</param>
+		/// <param name="state">布尔值</param>
 		public static void SetBoolValue(this LSAnimatorComponent self, string name, bool state)
 		{
 			if (!self.HasParameter(name))
@@ -158,6 +211,12 @@ namespace ET.Client
 			self.Animator.SetBool(name, state);
 		}
 
+		/// <summary>
+		/// 设置动画器的浮点参数值
+		/// </summary>
+		/// <param name="self">动画组件实例</param>
+		/// <param name="name">参数名称</param>
+		/// <param name="state">浮点值</param>
 		public static void SetFloatValue(this LSAnimatorComponent self, string name, float state)
 		{
 			if (!self.HasParameter(name))
@@ -168,6 +227,12 @@ namespace ET.Client
 			self.Animator.SetFloat(name, state);
 		}
 
+		/// <summary>
+		/// 设置动画器的整数参数值
+		/// </summary>
+		/// <param name="self">动画组件实例</param>
+		/// <param name="name">参数名称</param>
+		/// <param name="value">整数值</param>
 		public static void SetIntValue(this LSAnimatorComponent self, string name, int value)
 		{
 			if (!self.HasParameter(name))
@@ -178,6 +243,11 @@ namespace ET.Client
 			self.Animator.SetInteger(name, value);
 		}
 
+		/// <summary>
+		/// 触发动画器的触发器参数
+		/// </summary>
+		/// <param name="self">动画组件实例</param>
+		/// <param name="name">触发器参数名称</param>
 		public static void SetTrigger(this LSAnimatorComponent self, string name)
 		{
 			if (!self.HasParameter(name))
@@ -188,12 +258,21 @@ namespace ET.Client
 			self.Animator.SetTrigger(name);
 		}
 
+		/// <summary>
+		/// 设置动画器的播放速度
+		/// </summary>
+		/// <param name="self">动画组件实例</param>
+		/// <param name="speed">播放速度</param>
 		public static void SetAnimatorSpeed(this LSAnimatorComponent self, float speed)
 		{
 			self.stopSpeed = self.Animator.speed;
 			self.Animator.speed = speed;
 		}
 
+		/// <summary>
+		/// 重置动画器的播放速度到之前保存的值
+		/// </summary>
+		/// <param name="self">动画组件实例</param>
 		public static void ResetAnimatorSpeed(this LSAnimatorComponent self)
 		{
 			self.Animator.speed = self.stopSpeed;
