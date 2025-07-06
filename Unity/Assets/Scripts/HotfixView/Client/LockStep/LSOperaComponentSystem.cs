@@ -40,6 +40,5 @@ namespace ET.Client
             LSClientUpdater lsClientUpdater = self.GetParent<Room>().GetComponent<LSClientUpdater>();
             lsClientUpdater.Input.V = v.normalized;
         }
-
     }
 }

@@ -1,0 +1,5 @@
+---
+description: 当前项目使用Unity + C# + ET框架进行开发
+globs: ["**/*.cs", "**/*.unity", "**/*.prefab"]
+alwaysApply: true
+---

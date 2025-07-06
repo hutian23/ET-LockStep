@@ -7,5 +7,4 @@ namespace ET.Server
     {
         public List<long> waitMatchPlayers = new List<long>();
     }
-
 }
